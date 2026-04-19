@@ -2,7 +2,8 @@ import { Home } from "../pages/Home";
 import { Login } from "../pages/auth/login";
 import { Profile } from "../pages/profile";
 import { Logout } from "./logout";
-import { UpdateCSS } from "./funcs";
+import { UpdateCSS } from "./utils";
+import { navBarItems } from "./navbar";
 
 const routes = {
   "/profile": { component: Profile, stylesheet: "/css/profile.css" },
@@ -11,32 +12,33 @@ const routes = {
 };
 
 const ExtractHref = () => {
-  const base = "/graphql/";
+  const base = import.meta.env.BASE_URL;
   let path = location.pathname;
   if (path.startsWith(base)) {
     path = path.substring(base.length);
   }
-  // Remove leading and trailing slashes
   path = path.replace(/^\/|\/$/g, "");
-  console.log("Path detected:", path);
   return path;
 };
 
-/**
- * frontend router
- */
-export const ForumRouter = () => {
+export const ForumRouter = async () => {
   const path = ExtractHref();
   const route = routes["/" + path];
+
   if (path === "logout") {
     Logout();
     return;
   }
+
+  const render = async (routeData) => {
+    await routeData.component();
+    UpdateCSS(routeData.stylesheet);
+    navBarItems(); // Re-attach listeners for the new DOM
+  };
+
   if (route) {
-    route.component();
-    UpdateCSS(route.stylesheet);
+    await render(route);
   } else {
-    Home(); // Default route
-    UpdateCSS("/css/index.css"); // Default stylesheet
+    await render(routes["/"]);
   }
 };

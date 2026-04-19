@@ -1,204 +1,153 @@
 import { LoadNav } from "../funcs/navbar";
-import user from "../assets/user2.png";
-// import noheart from "../assets/unliked.svg";
-// import heart from "../assets/liked.svg";
-// import imgupload from "../assets/imageupload.svg";
-// import hashtag from "../assets/hashtag.svg";
+import { State } from "../funcs/state";
 // import { OrgIndexPosts } from "../funcs/posts";
-// import { convertImageToBase64 } from "../funcs/utils";
 
 export const Home = async () => {
-  if (!sessionStorage.getItem("user_token")) {
-    window.location.assign("/login");
+  const base = import.meta.env.BASE_URL;
+  if (!State.isLoggedIn()) {
+    window.location.assign(`${base}login`);
     return;
   }
 
-  document.getElementById("app").innerHTML = `
+  const app = document.getElementById("app");
+  const username = State.user.nickname;
+  const avatar = State.user.avatar;
+
+  app.innerHTML = `
     ${LoadNav()}
     <div class="lower-div">
-    <main>
-      <div id="c-post-modal" class="modal">
-        <div class="modal-content">
+      <main>
+        <div id="c-post-modal" class="modal">
+          <div class="modal-content">
             <div id="c-post-userinfo">
-                <div id="c-post-pfp">
-                    <img src="${sessionStorage.getItem("avatar")}">
-                </div>
-                <p id="c-post-nickname">${sessionStorage.getItem(
-                  "username"
-                )}</p>
+              <div id="c-post-pfp">
+                <img src="${avatar}">
+              </div>
+              <p id="c-post-nickname">${username}</p>
             </div>
-            <textarea id="c-post-textArea"
-                placeholder="What's on your mind?"></textarea>
+            <textarea id="c-post-textArea" placeholder="What's on your mind?"></textarea>
             <div id="c-post-options">
-                <div class="c-post-option">
-                    <img src="${imgupload}" alt="upload Image"
-                        title="upload Image" id="c-img-upload">
-                    <input type="file" id="img-upload">
-                </div>
-                <div class="c-post-option">
-                    <img src="${hashtag}" alt="Choose Category"
-                        title="Choose Category" id="cat-choose-Btn">
-                </div>
+              <div class="c-post-option">
+                <i class="fa fa-image" id="c-img-upload-trigger" title="Upload Image"></i>
+                <input type="file" id="img-upload" style="display: none">
+              </div>
+              <div class="c-post-option">
+                <i class="fa fa-hashtag" id="cat-choose-Btn" title="Choose Category"></i>
+              </div>
             </div>
-            <div id="c-post-cats">
-                <select id="c-post-cat-select">
-                    <option class="c-option" value="1">General</option>
-                    <option class="c-option" value="2">Engineering</option>
-                    <option class="c-option" value="3">Travel</option>
-                    <option class="c-option" value="4">Tech</option>
-                    <option class="c-option" value="5">Mathematics</option>
-                </select>
+            <div id="c-post-cats" style="display: none">
+              <select id="c-post-cat-select">
+                <option value="1">General</option>
+                <option value="2">Engineering</option>
+                <option value="3">Travel</option>
+                <option value="4">Tech</option>
+                <option value="5">Mathematics</option>
+              </select>
             </div>
-            <div id="c-post-Btn">Create Post</div>
-        </div>
-      </div>
-      <div id="posts"></div>
-    </main>
-  
-    <div class="side-divs">
-      <div class="profile-card">
-        <div class="profile-header">
-          <div class="profileImage">
-            <img src="${sessionStorage.getItem("avatar")}" alt="">
+            <div id="c-post-Btn" class="btn-primary">Create Post</div>
           </div>
         </div>
-        <div class="UserInfo-div">
-          <p class="UserName-p">${sessionStorage.getItem("username")}</p>
-          <p class="profile-title">Profile</p>
+        <div id="posts"></div>
+      </main>
+    
+      <div class="side-divs">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profileImage">
+              <img src="${avatar}" alt="">
+            </div>
+          </div>
+          <div class="UserInfo-div">
+            <p class="UserName-p">${username}</p>
+            <p class="profile-title">Profile</p>
+          </div>
+        </div>
+        <div class="categories-section">
+          <h2 class="categories-text">Users</h2>
+          <ul class="category-list"></ul>
         </div>
       </div>
-      <div class="categories-section">
-        <h2 class="categories-text">Users</h2>
-        <ul class="category-list">
-        </ul>
-      </div>
     </div>
-  </div>
   `;
 
-  // try {
-  //   const response = await fetch("/categories");
+  // --- Modal & Form Logic ---
+  const modal = document.getElementById("c-post-modal");
+  const modalOpenBtn = document.getElementById("c-post-start");
+  const createPostBtn = document.getElementById("c-post-Btn");
+  const catToggleBtn = document.getElementById("cat-choose-Btn");
+  const catSelectDiv = document.getElementById("c-post-cats");
+  const imgUploadTrigger = document.getElementById("c-img-upload-trigger");
+  const imgInput = document.getElementById("img-upload");
 
-  //   if (!response.ok) {
-  //     throw new Error(`HTTP error! status: ${response.status}`);
-  //   }
+  if (modalOpenBtn) {
+    modalOpenBtn.onclick = () => (modal.style.display = "block");
+  }
 
-  //   const data = await response.json();
-  //   const categoryList = document.querySelector(".category-list");
+  window.onclick = (event) => {
+    if (event.target === modal) modal.style.display = "none";
+  };
 
-  //   data.forEach((category) => {
-  //     const li = document.createElement("li");
-  //     li.textContent = category.name;
-  //     categoryList.appendChild(li);
-  //   });
-  // } catch (error) {
-  //   console.error("Fetch failed:", error);
-  // }
-
-  // Modal Operations
-  var modal = document.getElementById("c-post-modal");
-  var modalOpenBtn = document.getElementById("c-post-start");
-
-  const encodedImage = sessionStorage.getItem("avatar"); // replace with the encoded image string
-
-  const img = new Image();
-  let url = "data:image/png;base64," + encodedImage;
-  fetch(url)
-    .then((res) => res.blob())
-    .then((blob) => {});
-  document.getElementById("c-avatar").appendChild(img);
-
-  if (modalOpenBtn && modal) {
-    modalOpenBtn.onclick = function () {
-      modal.style.display = "block";
+  if (catToggleBtn) {
+    catToggleBtn.onclick = () => {
+      const isHidden = catSelectDiv.style.display === "none";
+      catSelectDiv.style.display = isHidden ? "block" : "none";
     };
   }
 
-  // When user clicks outside window, remove modal
-  window.onclick = function (event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  };
+  if (imgUploadTrigger) {
+    imgUploadTrigger.onclick = () => imgInput.click();
+  }
 
-  const create_post_Btn = document.getElementById("c-post-Btn");
+  if (createPostBtn) {
+    createPostBtn.addEventListener("click", async () => {
+      const postText = document.getElementById("c-post-textArea").value;
+      const postCategory = document.getElementById("c-post-cat-select").value;
+      
+      let postImage = null;
+      if (imgInput.files && imgInput.files[0]) {
+        // postImage = await convertImageToBase64(imgInput.files[0]);
+      }
 
-  if (create_post_Btn) {
-    create_post_Btn.addEventListener("click", async () => {
-      const post_text = document.getElementById("c-post-textArea").value;
-      const raw_image_file = document.getElementById("c-img-upload").value;
-      const post_category = document.getElementById("cat-choose-Btn").value;
-
-      const Image_Converstion_wrapper = async () => {
-        return await convertImageToBase64(raw_image_file);
-      };
-
-      const postImage = await Image_Converstion_wrapper();
-
-      const post_data = {
-        user_token: sessionStorage.getItem("user_token"),
-        post_text: post_text,
+      const postData = {
+        user_token: State.user.token,
+        post_text: postText,
         post_image_base64: postImage,
-        post_category: post_category,
+        post_category: postCategory,
       };
 
       try {
         const res = await fetch("/post/create", {
           method: "POST",
-          body: JSON.stringify(post_data),
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          body: JSON.stringify(postData),
+          headers: { "Content-Type": "application/json" },
         });
 
-        modal.style.display = "none";
-
         if (res.status === 201) {
+          modal.style.display = "none";
           window.location.reload();
         } else {
-          throw new Error(res.status, res.statusText);
+          throw new Error(`Failed to create post: ${res.statusText}`);
         }
       } catch (error) {
-        alert(error);
-        console.error("post creation error", error);
+        console.error("Post creation error:", error);
+        alert("Error creating post. Please try again.");
       }
     });
   }
-  let toggled = false;
 
-  document.getElementById("cat-choose-Btn").addEventListener("click", () => {
-    toggled = !toggled;
-    if (toggled) {
-      document.getElementById("c-post-cats").style.display = "block";
-    } else {
-      document.getElementById("c-post-cats").style.display = "none";
-    }
+  // --- Like Button Logic ---
+  const handleLike = (event) => {
+    const btn = event.currentTarget;
+    const img = btn.querySelector("img");
+    if (!img) return;
+    
+    const isLiked = img.src.includes("liked.svg");
+    img.src = isLiked ? "unliked.svg" : "liked.svg";
+  };
+
+  document.querySelectorAll(".p-likeBtn").forEach((btn) => {
+    btn.addEventListener("click", handleLike);
   });
 
-  document.getElementById("c-img-upload").addEventListener("click", () => {
-    document.getElementById("img-upload").click();
-  });
-
-  const likeImages = document.querySelectorAll(".p-likeBtn img");
-
-  console.log(likeImages);
-
-  likeImages.forEach((likeBtn) => {
-    console.log(likeBtn.getAttribute("src"));
-
-    likeBtn.addEventListener("click", () => {
-      if (likeBtn.getAttribute("src") === noheart) {
-        likeBtn.setAttribute("src", heart);
-        console.log("liked");
-        // add other like event
-      } else {
-        likeBtn.setAttribute("src", noheart);
-        console.log("unliked");
-        // add other unlike event
-      }
-    });
-  });
-
-  await OrgIndexPosts();
+  // await OrgIndexPosts();
 };
