@@ -48,7 +48,7 @@ export const Login = () => {
 
   console.log(signInBtn);
   signInBtn.addEventListener("click", () => {
-      container_sign.classList.remove("right-panel-active");
+    container_sign.classList.remove("right-panel-active");
   });
 
   console.log(signUpBtn);

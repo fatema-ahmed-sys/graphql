@@ -5,6 +5,6 @@
  */
 export const Logout = async () => {
   localStorage.removeItem("VAriableName");
-  localStorage.removeItem("jwt")
+  localStorage.removeItem("jwt");
   window.location.assign("/login");
 };

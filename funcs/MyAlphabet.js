@@ -36,10 +36,10 @@ export const Alphabet = {
     }
   `,
   /**
-  * All projects (within the /bahrain/bh-module) done by the user.
-  *
-  * Projects can be of type excersise or project
-  */
+   * All projects (within the /bahrain/bh-module) done by the user.
+   *
+   * Projects can be of type excersise or project
+   */
   D: `
   query Transaction {
     transaction(
@@ -72,7 +72,7 @@ export const Alphabet = {
     }
   }
   `,
-    /**
+  /**
    *  Number of times a user passed someone else's audit
    */
   F: `
@@ -132,9 +132,9 @@ export const Alphabet = {
     }
   }
   `,
-/**
- * Get every skill and their amount (for radial graph)
- */
+  /**
+   * Get every skill and their amount (for radial graph)
+   */
   J: `
     query Transaction2 {
     transaction(
@@ -149,9 +149,9 @@ export const Alphabet = {
     }
   }
   `,
-/**
- * each XP transaction with time
- */
+  /**
+   * each XP transaction with time
+   */
   K: `
     query Transaction3 {
     transaction(where: { type: { _eq: "xp" } }) {
@@ -161,8 +161,8 @@ export const Alphabet = {
   }
   `,
   /**
- * to every project and what's needed to open it.
- */
+   * to every project and what's needed to open it.
+   */
   L: `
   query get_child_for_edit {
 	object_child(where: {parent:{name:{_eq:"Module"}} }) {
@@ -175,8 +175,8 @@ export const Alphabet = {
 }
   `,
   /**
-  * get the state of the user in the program
-  */
+   * get the state of the user in the program
+   */
   M: `
   query DevStaute {
   object(where:{name:{_eq:"Module"}}){
@@ -186,8 +186,8 @@ export const Alphabet = {
   `,
   /**
    * this is the query for the timeline graph that will be user later for one of the new added pages.
-   * 
-  */
+   *
+   */
   N: `
     query timeline_graph {
       user {

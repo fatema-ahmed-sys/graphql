@@ -6,15 +6,23 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "preview": "vite preview",
-    "start": "vite",
-    "lint": "vite lint"
+    "start": "concurrently \"vite\" \"tsc -w\" \"func start --typescript\"",
+    "build": "vite build && tsc",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "test": "echo \"No tests yet...\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
+    "@types/node": "^25.6.0",
+    "concurrently": "^9.2.1",
     "gh-pages": "^6.1.1",
+    "prettier": "^3.8.3",
+    "rimraf": "^6.1.3",
+    "typescript": "^6.0.3",
     "vite": "^5.2.6"
   },
   "dependencies": {

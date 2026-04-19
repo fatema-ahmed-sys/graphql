@@ -16,7 +16,7 @@
  * - The user's XP ratio
  * - The user's skill and language performance
  * - The user's submitted and in-progress projects
- * 
+ *
  * The function also creates various charts and graphs to visualize the user's data.
  */
 /**
@@ -50,17 +50,38 @@
  * - A doughnut chart showing the XP per project
  */
 import { LoadNav, navBarItems } from "../funcs/navbar";
-import * as d3 from 'd3';
+import * as d3 from "d3";
 import { Alphabet } from "../funcs/MyAlphabet";
-import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
-import { fetchSkillData, fetchUserLevel, fetchFailedAudits, fetchPassedAudits, fetchInProgressProjects } from "../funcs/fetch";
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import {
+  fetchSkillData,
+  fetchUserLevel,
+  fetchFailedAudits,
+  fetchPassedAudits,
+  fetchInProgressProjects,
+} from "../funcs/fetch";
 import { getRandomColor } from "../funcs/funcs";
 
 /**
  * This function fetches the profile page
  */
 
-Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+Chart.register(
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+);
 export const Profile = async () => {
   // check if the user is logged in.
   const VAriableName = localStorage.getItem("jwt");
@@ -226,7 +247,6 @@ export const Profile = async () => {
   await myAudits(VAriableName);
   mySkills();
   await fetchInProgressProjects();
-
 };
 
 // Display the user XP and XP ratio in the DOM and generate the XP graph
@@ -234,13 +254,13 @@ export function displayUserXp(upAmount, downAmount) {
   console.log("Displaying user xp...");
 
   // calculate the audit ratio.
-  const auditRatio = (upAmount / downAmount);
+  const auditRatio = upAmount / downAmount;
 
   // Display the user XP ratio
   let xpRatioElement = document.getElementById("xpRatio");
   if (xpRatioElement) {
     // Remove any existing canvas or SVG elements
-    xpRatioElement.innerHTML = '';
+    xpRatioElement.innerHTML = "";
 
     const width = 250; // increased width
     const height = 100; // increased height
@@ -258,8 +278,8 @@ export function displayUserXp(upAmount, downAmount) {
     const y = d3.scaleBand().range([0, height]).padding(0.3);
 
     const data = [
-      { label: 'Received XP', value: downAmount },
-      { label: 'Given XP', value: upAmount },
+      { label: "Received XP", value: downAmount },
+      { label: "Given XP", value: upAmount },
     ];
 
     x.domain([0, d3.max(data, (d) => d.value)]);
@@ -274,11 +294,12 @@ export function displayUserXp(upAmount, downAmount) {
       .attr("dx", "-0.8em")
       .attr("dy", "0.15em");
 
-    svg.append("g")
+    svg
+      .append("g")
       .attr("transform", `translate(0, ${height})`) // move x-axis to the bottom
       .call(d3.axisBottom(x))
       .selectAll("text")
-      .attr("transform", "rotate(-90)")  // rotate the text
+      .attr("transform", "rotate(-90)") // rotate the text
       .style("text-anchor", "end")
       .attr("dx", "-0.8em")
       .attr("dy", "-0.5em");
@@ -293,16 +314,23 @@ export function displayUserXp(upAmount, downAmount) {
       .attr("y", (d) => y(d.label))
       .attr("width", (d) => x(d.value))
       .attr("height", y.bandwidth())
-      .attr("fill", (d, i) => (i === 0 ? "rgba(54, 162, 235, 0.2)" : "rgba(255, 99, 132, 0.2)"))
+      .attr("fill", (d, i) =>
+        i === 0 ? "rgba(54, 162, 235, 0.2)" : "rgba(255, 99, 132, 0.2)"
+      )
       .on("mouseover", function (event, d) {
-        d3.select(this).attr("fill", (d, i) => (i === 0 ? "rgb(54, 162, 235)" : "rgb(255, 99, 132)"));
+        d3.select(this).attr("fill", (d, i) =>
+          i === 0 ? "rgb(54, 162, 235)" : "rgb(255, 99, 132)"
+        );
       })
       .on("mouseout", function (event, d) {
-        d3.select(this).attr("fill", (d, i) => (i === 0 ? "rgba(54, 162, 235, 0.2)" : "rgba(255, 99, 132, 0.2)"));
+        d3.select(this).attr("fill", (d, i) =>
+          i === 0 ? "rgba(54, 162, 235, 0.2)" : "rgba(255, 99, 132, 0.2)"
+        );
       });
 
     // Add a title
-    svg.append("text")
+    svg
+      .append("text")
       .attr("x", width / 2)
       .attr("y", -margin.top / 2)
       .attr("text-anchor", "middle")
@@ -314,7 +342,6 @@ export function displayUserXp(upAmount, downAmount) {
   if (xpRatioElementtxt) {
     xpRatioElementtxt.textContent = `Audit Ratio: ${auditRatio.toFixed(2)}`;
   }
-
 
   const totalXP = upAmount + downAmount;
   const upXp = document.getElementById("upXp");
@@ -338,9 +365,10 @@ export async function displayUserInfo(user) {
   // Set the title of the page to the username of the user
   document.title = `${user.login}s Profile`;
 
-
   // Set the user first name and last name
-  let firstNameLastNameElement = document.getElementById("first-name-last-name");
+  let firstNameLastNameElement = document.getElementById(
+    "first-name-last-name"
+  );
   if (firstNameLastNameElement) {
     firstNameLastNameElement.textContent = `Welcome, ${user.attrs.firstName} ${user.attrs.lastName}!`;
   }
@@ -350,8 +378,6 @@ export async function displayUserInfo(user) {
   if (LoginInUserElement) {
     LoginInUserElement.textContent = `${user.login}`;
   }
-
-
 
   const userLevel = await fetchUserLevel(user.login);
   console.log("User level2:", userLevel);
@@ -364,44 +390,41 @@ export async function displayUserInfo(user) {
   }
 }
 
-
-
-
 export async function mySkills() {
   const { skills, languages } = await fetchSkillData();
-  displayRadarChart(skills, 'skill-container');
-  displayRadarChart(languages, 'language-container');
+  displayRadarChart(skills, "skill-container");
+  displayRadarChart(languages, "language-container");
 }
 
 export function displayRadarChart(data, containerId) {
-  console.log('data:', data, 'containerId:', containerId);
+  console.log("data:", data, "containerId:", containerId);
   // Remove the previous chart
   const skillContainer = document.getElementById(containerId);
-  skillContainer.innerHTML = '';
+  skillContainer.innerHTML = "";
 
   const width = 220;
   const height = 220;
   const radius = Math.min(width, height) / 2 - 10;
 
-  const color = d3.scaleOrdinal().range(['#B19CD9']);
+  const color = d3.scaleOrdinal().range(["#B19CD9"]);
 
   const angleSlice = (Math.PI * 2) / data.length;
 
-
-  const maxValue = d3.max(data, d => d.value);
+  const maxValue = d3.max(data, (d) => d.value);
 
   // Normalize the values to ensure they fit within the chart
-  const normalizedData = data.map(d => ({
+  const normalizedData = data.map((d) => ({
     skill: d.skill,
-    value: (d.value / maxValue) * 100
+    value: (d.value / maxValue) * 100,
   }));
 
-  const svg = d3.select(`#${containerId}`)
-    .append('svg')
-    .attr('width', width)
-    .attr('height', height)
-    .append('g')
-    .attr('transform', `translate(${width / 2}, ${height / 2})`);
+  const svg = d3
+    .select(`#${containerId}`)
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
   const rScale = d3.scaleLinear().range([0, radius]).domain([0, 100]);
 
@@ -409,48 +432,56 @@ export function displayRadarChart(data, containerId) {
 
   // Draw the grid circles
   const grid = svg
-    .append('g')
-    .attr('class', 'gridCircles')
-    .selectAll('circle')
+    .append("g")
+    .attr("class", "gridCircles")
+    .selectAll("circle")
     .data(ticks)
     .enter()
-    .append('circle')
-    .attr('r', (d) => rScale(d))
-    .style('fill', 'none')
-    .style('stroke', '#ccc')
-    .style('stroke-width', 1);
+    .append("circle")
+    .attr("r", (d) => rScale(d))
+    .style("fill", "none")
+    .style("stroke", "#ccc")
+    .style("stroke-width", 1);
 
   // Draw the axes
   const axisGrid = svg
-    .append('g')
-    .attr('class', 'axisWrapper')
-    .selectAll('.levels')
+    .append("g")
+    .attr("class", "axisWrapper")
+    .selectAll(".levels")
     .data(ticks)
     .enter()
-    .append('g')
-    .attr('class', 'levels');
+    .append("g")
+    .attr("class", "levels");
 
   // Draw axis labels
   const axisLabel = svg
-    .append('g')
-    .selectAll('text')
+    .append("g")
+    .selectAll("text")
     .data(data)
     .enter()
-    .append('text')
-    .attr('text-anchor', 'middle')
-    .attr('dy', '0.35em')
-    .attr('x', (d, i) => rScale(100) * Math.cos(angleSlice * i - Math.PI / 2) + 5)
-    .attr('y', (d, i) => rScale(100) * Math.sin(angleSlice * i - Math.PI / 2) - 5)
+    .append("text")
+    .attr("text-anchor", "middle")
+    .attr("dy", "0.35em")
+    .attr(
+      "x",
+      (d, i) => rScale(100) * Math.cos(angleSlice * i - Math.PI / 2) + 5
+    )
+    .attr(
+      "y",
+      (d, i) => rScale(100) * Math.sin(angleSlice * i - Math.PI / 2) - 5
+    )
     .text((d) => d.skill)
-    .style('font-size', '14px')
-    .style('fill', 'rgb(177, 156, 217)');
+    .style("font-size", "14px")
+    .style("fill", "rgb(177, 156, 217)");
 
   // Draw the radar area
-  const radarLine = d3.radialLine()
+  const radarLine = d3
+    .radialLine()
     .radius((d) => rScale(d.value))
     .angle((d, i) => i * angleSlice);
 
-  svg.append("path")
+  svg
+    .append("path")
     // .data(data)
     .data([normalizedData])
     .attr("class", "radarStroke")
@@ -462,19 +493,25 @@ export function displayRadarChart(data, containerId) {
 
   // Draw the radar circles
   const dataPointWrapper = svg
-    .selectAll('.radarCircle')
+    .selectAll(".radarCircle")
     // .data(data)
     .data(normalizedData)
     .enter()
-    .append('g')
-    .attr('class', 'radarCircle');
+    .append("g")
+    .attr("class", "radarCircle");
 
   dataPointWrapper
-    .append('circle')
-    .attr('r', 4)
-    .style('fill', color(0))
-    .attr('cx', (d, i) => rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2))
-    .attr('cy', (d, i) => rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2));
+    .append("circle")
+    .attr("r", 4)
+    .style("fill", color(0))
+    .attr(
+      "cx",
+      (d, i) => rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2)
+    )
+    .attr(
+      "cy",
+      (d, i) => rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2)
+    );
 
   // Add more circles to ensure no dot is out of the graph
   // const numCircles = 10; // Adjust the number of circles as needed
@@ -493,27 +530,25 @@ export function displayRadarChart(data, containerId) {
 }
 
 export async function createGraph(VAriableName, query) {
-  let tempDataPath = []
+  let tempDataPath = [];
   let numberOfPaths = 0;
 
   try {
-    const response = await fetch(
-      Alphabet.A + "api/graphql-engine/v1/graphql",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${VAriableName}`,
-        },
-        body: JSON.stringify({ query }),
-      }
-    );
-
+    const response = await fetch(Alphabet.A + "api/graphql-engine/v1/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${VAriableName}`,
+      },
+      body: JSON.stringify({ query }),
+    });
 
     const data = await response.json();
     // Check if data.data and data.data.user exist
     if (!data.data.user || data.data.user.length === 0) {
-      console.error("Error: data.data or data.data.user is undefined or empty.");
+      console.error(
+        "Error: data.data or data.data.user is undefined or empty."
+      );
       return; // Exit the function if the data is not structured as expected
     }
     const user = data.data.user[0];
@@ -523,9 +558,10 @@ export async function createGraph(VAriableName, query) {
       user.downAmount.aggregate.sum.amount
     );
 
-
-    const filteredData = data.data.user[0].timeline.filter(item =>
-      item.path.startsWith('/bahrain/bh-module/') && item.path !== '/bahrain/bh-module/checkpoint'
+    const filteredData = data.data.user[0].timeline.filter(
+      (item) =>
+        item.path.startsWith("/bahrain/bh-module/") &&
+        item.path !== "/bahrain/bh-module/checkpoint"
     );
     numberOfPaths = filteredData.length;
     tempDataPath = filteredData;
@@ -534,13 +570,14 @@ export async function createGraph(VAriableName, query) {
     let lastSubmitProject = document.getElementById("last-submit");
     if (lastSubmitProject) {
       // Sort the tempDataPath array by createdAt date in ascending order
-      tempDataPath.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      tempDataPath.sort(
+        (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+      );
 
       // Get the latest entry
       const latestEntry = tempDataPath[tempDataPath.length - 1];
 
-      const cleanedPath = latestEntry.path.replace('/bahrain/bh-module/', '');
-
+      const cleanedPath = latestEntry.path.replace("/bahrain/bh-module/", "");
 
       // Update the text content with the path of the latest entry
       lastSubmitProject.textContent = `${cleanedPath}`;
@@ -562,8 +599,10 @@ export async function createGraph(VAriableName, query) {
       // window.addEventListener("resize", () => {
       //   createTimeline(timelineContainer.offsetWidth, firstHeight, data);
       // });
-      const filteredData = data.data.user[0].timeline.filter(item =>
-        item.path.startsWith('/bahrain/bh-module/') && item.path !== '/bahrain/bh-module/checkpoint'
+      const filteredData = data.data.user[0].timeline.filter(
+        (item) =>
+          item.path.startsWith("/bahrain/bh-module/") &&
+          item.path !== "/bahrain/bh-module/checkpoint"
       );
       numberOfPaths = filteredData.length;
       tempDataPath = filteredData;
@@ -577,30 +616,26 @@ export async function createGraph(VAriableName, query) {
 
   // Calculate total amount
   let totalAmount = 0;
-  tempDataPath.forEach(item => {
+  tempDataPath.forEach((item) => {
     totalAmount += item.amount;
   });
 
-
   console.log(tempDataPath);
-
 
   //! Chart JS
   const chart = document.getElementById("doughnut");
   const eventList = document.querySelector(".chart ul");
 
+  console.log("tempDataPath:", tempDataPath);
 
-
-  console.log('tempDataPath:', tempDataPath);
-
-  let chartData = tempDataPath.map(item => {
+  let chartData = tempDataPath.map((item) => {
     return {
-      path: item.path.replace('/bahrain/bh-module/', ''),
-      amount: item.amount
+      path: item.path.replace("/bahrain/bh-module/", ""),
+      amount: item.amount,
     };
   });
 
-  console.log('chartData:', chartData);
+  console.log("chartData:", chartData);
 
   let width = 350,
     height = 350,
@@ -608,86 +643,91 @@ export async function createGraph(VAriableName, query) {
 
   let radius = Math.min(width, height) / 2 - margin;
 
-  let svg = d3.select("#doughnut")
+  let svg = d3
+    .select("#doughnut")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-
   // Generate colors for each item in chartData
   let colors = chartData.map(() => getRandomColor());
 
-  let color = d3.scaleOrdinal()
-    .domain(chartData.map(d => d.path))
+  let color = d3
+    .scaleOrdinal()
+    .domain(chartData.map((d) => d.path))
     .range(colors);
 
-
-  let pie = d3.pie()
+  let pie = d3
+    .pie()
     .sort(null)
-    .value(function (d) { return d.amount; });
+    .value(function (d) {
+      return d.amount;
+    });
 
-  let arc = d3.arc()
+  let arc = d3
+    .arc()
     .innerRadius(radius * 0.5)
     .outerRadius(radius * 0.8);
 
-  let outerArc = d3.arc()
+  let outerArc = d3
+    .arc()
     .innerRadius(radius * 0.9)
     .outerRadius(radius * 0.9);
 
   let pieData = pie(chartData);
-  console.log('pieData:', pieData);
+  console.log("pieData:", pieData);
 
-  var tooltip = d3.select("body").append("div")
+  var tooltip = d3
+    .select("body")
+    .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
 
   svg
-    .selectAll('allSlices')
+    .selectAll("allSlices")
     .data(pieData)
     .enter()
-    .append('path')
-    .attr('d', arc)
+    .append("path")
+    .attr("d", arc)
     // .attr('fill', function (d) { return (color(d.data.path)); })
     // .attr("stroke", "white")
-    .attr('fill', 'none') // No fill
-    .attr("stroke", function (d) { return (color(d.data.path)); }) // Border color
+    .attr("fill", "none") // No fill
+    .attr("stroke", function (d) {
+      return color(d.data.path);
+    }) // Border color
     .style("stroke-width", "2px")
     .style("opacity", 0.7)
     .style("pointer-events", "all") // Add pointer events
     .on("mouseover", function (event, d) {
-      d3.select(this).attr('fill', color(d.data.path)); // Fill on hover
+      d3.select(this).attr("fill", color(d.data.path)); // Fill on hover
       tooltip.transition().duration(200).style("opacity", 0.9);
       tooltip
         .html("Project: " + d.data.path + "<br>Amount: " + d.data.amount)
         .style("left", event.pageX + "px")
         .style("top", event.pageY - 28 + "px")
-        .style("border", "2px solid " + color(d.data.path)) // Add border with color
+        .style("border", "2px solid " + color(d.data.path)); // Add border with color
       // .style("background", "none"); // Remove fill
     })
     .on("mouseout", function (d) {
-      d3.select(this).attr('fill', 'none'); // Fill on hover
+      d3.select(this).attr("fill", "none"); // Fill on hover
       tooltip.transition().duration(500).style("opacity", 0);
       // tooltip.style("border", "none"); // Remove border
     });
 
   // Custom Legend
-  let legend = d3.select("#doughnut")
-    .append("div")
-    .attr("class", "legend");
+  let legend = d3.select("#doughnut").append("div").attr("class", "legend");
 
   chartData.forEach((d, i) => {
-    let legendItem = legend.append("div")
-      .attr("class", "legend-item");
+    let legendItem = legend.append("div").attr("class", "legend-item");
 
-    legendItem.append("div")
+    legendItem
+      .append("div")
       .attr("class", "legend-color")
       .style("background-color", colors[i]);
 
-    legendItem.append("div")
-      .attr("class", "legend-label")
-      .text(d.path);
+    legendItem.append("div").attr("class", "legend-label").text(d.path);
   });
 }
 
@@ -700,15 +740,15 @@ export async function myAudits(VAriableName) {
 
   // Remove the previous chart
   const auditContainer = document.getElementById("audit-container");
-  auditContainer.innerHTML = '';
+  auditContainer.innerHTML = "";
 
   const failedAudits = await fetchFailedAudits(VAriableName);
   const passedAudits = await fetchPassedAudits(VAriableName);
   console.log("failedAudits:", failedAudits);
   console.log("passedAudits:", passedAudits);
   const data = [
-    { label: 'Failed Audits', value: failedAudits },
-    { label: 'Passed Audits', value: passedAudits },
+    { label: "Failed Audits", value: failedAudits },
+    { label: "Passed Audits", value: passedAudits },
   ];
 
   const width = 220;
@@ -716,19 +756,17 @@ export async function myAudits(VAriableName) {
   const radius = Math.min(width, height) / 2;
   const margin = { top: 10, right: 10, bottom: 10, left: 10 }; // increased margins
 
+  const color = d3
+    .scaleOrdinal()
+    .domain(data.map((d) => d.label))
+    .range(["#FF6B6B", "#4ECDC4"]);
 
-  const color = d3.scaleOrdinal()
-    .domain(data.map(d => d.label))
-    .range(['#FF6B6B', '#4ECDC4']);
+  const pie = d3.pie().value((d) => d.value);
 
-  const pie = d3.pie()
-    .value(d => d.value);
+  const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
-  const arc = d3.arc()
-    .innerRadius(0)
-    .outerRadius(radius);
-
-  const svg = d3.select("#audit-container")
+  const svg = d3
+    .select("#audit-container")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -736,7 +774,8 @@ export async function myAudits(VAriableName) {
     .attr("transform", `translate(${width / 2},${height / 2})`);
 
   // Create a div element for the tooltip
-  const tooltip = d3.select("#audit-container")
+  const tooltip = d3
+    .select("#audit-container")
     .append("div")
     .attr("class", "tooltip")
     .style("position", "absolute")
@@ -747,36 +786,42 @@ export async function myAudits(VAriableName) {
     .style("pointer-events", "none")
     .style("opacity", 0);
 
-  const arcs = svg.selectAll("arc")
+  const arcs = svg
+    .selectAll("arc")
     .data(pie(data))
     .enter()
     .append("g")
     .attr("class", "arc");
 
-  arcs.append("path")
+  arcs
+    .append("path")
     .attr("d", arc)
-    .attr("fill", d => color(d.data.label))
-    .on('mouseover', function (event, d) {
+    .attr("fill", (d) => color(d.data.label))
+    .on("mouseover", function (event, d) {
       tooltip.style("opacity", 1);
-      tooltip.html(`<strong>${d.data.label}:</strong> ${d.data.value}`)
-        .style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 25) + "px");
+      tooltip
+        .html(`<strong>${d.data.label}:</strong> ${d.data.value}`)
+        .style("left", event.pageX + 10 + "px")
+        .style("top", event.pageY - 25 + "px");
     })
-    .on('mousemove', function (event) {
-      tooltip.style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 25) + "px");
+    .on("mousemove", function (event) {
+      tooltip
+        .style("left", event.pageX + 10 + "px")
+        .style("top", event.pageY - 25 + "px");
     })
-    .on('mouseout', function () {
+    .on("mouseout", function () {
       tooltip.style("opacity", 0);
     });
 
-  arcs.append("text")
-    .attr("transform", d => `translate(${arc.centroid(d)})`)
+  arcs
+    .append("text")
+    .attr("transform", (d) => `translate(${arc.centroid(d)})`)
     .attr("text-anchor", "middle");
   // .text(d => `${d.data.label}: ${d.data.value}`);
 
   // Add a title
-  svg.append("text")
+  svg
+    .append("text")
     .attr("x", 0)
     .attr("y", -height / 2 + 20)
     .attr("text-anchor", "middle")
@@ -784,8 +829,6 @@ export async function myAudits(VAriableName) {
     .style("font-weight", "bold");
   // .text("Audit Performance");
 }
-
-
 
 export function displayUserLevel(level) {
   // if the user is between level 0 -10 return a string containing the level followed by "Aspiring Developer"

@@ -105,9 +105,7 @@ export const Home = async () => {
   let url = "data:image/png;base64," + encodedImage;
   fetch(url)
     .then((res) => res.blob())
-    .then((blob) => {
-      
-    });
+    .then((blob) => {});
   document.getElementById("c-avatar").appendChild(img);
 
   if (modalOpenBtn && modal) {

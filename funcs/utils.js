@@ -12,4 +12,3 @@ export const UpdateCSS = (stylesheet) => {
     console.error("Page stylesheet link not found");
   }
 };
-

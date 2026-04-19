@@ -1,5 +1,5 @@
-const { ApolloServer, gql } = require('apollo-server');
-const resolvers = require('./resolvers');
+const { ApolloServer, gql } = require("apollo-server");
+const resolvers = require("./resolvers");
 
 const typeDefs = gql`
   type Query {

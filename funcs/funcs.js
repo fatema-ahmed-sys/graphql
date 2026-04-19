@@ -19,7 +19,7 @@ export const UpdateCSS = (stylesheet) => {
 };
 
 /**
- * 
+ *
  * a function that checks if the skill name is a programming language or not.
  * Go
  * Js
@@ -31,10 +31,22 @@ export const UpdateCSS = (stylesheet) => {
  * C
  * Ruby
  * Rails
-*/
+ */
 
 export function isProgrammingLanguage(skillName) {
-  const programmingLanguages = ['go', 'js', 'html', 'css', 'unix', 'docker', 'sql', 'c', 'ruby', 'rails', 'java'];
+  const programmingLanguages = [
+    "go",
+    "js",
+    "html",
+    "css",
+    "unix",
+    "docker",
+    "sql",
+    "c",
+    "ruby",
+    "rails",
+    "java",
+  ];
   return programmingLanguages.includes(skillName);
 }
 
@@ -44,8 +56,8 @@ export function isProgrammingLanguage(skillName) {
  */
 
 export function getRandomColor() {
-  let letters = '0123456789ABCDEF';
-  let color = '#';
+  let letters = "0123456789ABCDEF";
+  let color = "#";
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
   }

@@ -8,7 +8,7 @@ import user from "../assets/user2.png";
  */
 
 export const LoadNav = () => {
-    return /*html*/ `
+  return /*html*/ `
   <nav class="main-menu">
     <div>
       <div class="user-info">
@@ -76,91 +76,95 @@ export const LoadNav = () => {
  * to handle the dark mode btn and the movment in the navbar
  */
 export function navBarItems() {
-    //! Active Navbar Item
+  //! Active Navbar Item
 
-    const navItems = document.querySelectorAll(".nav-item");
+  const navItems = document.querySelectorAll(".nav-item");
 
-    navItems.forEach((navItem, i) => {
-      navItem.addEventListener("click", () => {
-        navItems.forEach((item, j) => {
-          item.className = "nav-item";
-        });
-        navItem.className = "nav-item active";
+  navItems.forEach((navItem, i) => {
+    navItem.addEventListener("click", () => {
+      navItems.forEach((item, j) => {
+        item.className = "nav-item";
       });
+      navItem.className = "nav-item active";
     });
-  
-    //! Light/Dark Mode
-    const sunIcon = document.querySelector('.sun');
-    const moonIcon = document.querySelector('.moon');
-    const morningImage = document.querySelector('.morning-img');
-    const nightImage = document.querySelector('.night-img');
-    const toggle = document.querySelector('.toggle');
-    document.addEventListener('DOMContentLoaded', function () {
-  
-      window.switchTheme = function () {
-        document.body.classList.toggle('darkmode');
-        if (document.body.classList.contains('darkmode')) {
-          sunIcon.classList.remove('hidden');
-          moonIcon.classList.add('hidden');
-          morningImage.classList.remove('hidden');
-          nightImage.classList.add('hidden');
-          localStorage.setItem('theme', 'dark');
-        } else {
-          sunIcon.classList.add('hidden');
-          moonIcon.classList.remove('hidden');
-          morningImage.classList.add('hidden');
-          nightImage.classList.remove('hidden');
-          localStorage.setItem('theme', 'light');
-        }
-      }
-  
-      function updateTheme(themeMode) {
-        if (themeMode === 'dark') {
-          sunIcon.classList.add('hidden');
-          moonIcon.classList.remove('hidden');
-          morningImage.classList.add('hidden');
-          nightImage.classList.remove('hidden');
-          document.body.classList.add('darkmode');
-        } else {
-          sunIcon.classList.add('hidden');
-          moonIcon.classList.remove('hidden');
-          morningImage.classList.add('hidden');
-          nightImage.classList.remove('hidden');
-          document.body.classList.remove('darkmode');
-        }
-      }
-  
-      function initialTheme() {
-        const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)');
-        const storedTheme = localStorage.getItem('theme');
-  
-        if (storedTheme === 'dark' || (storedTheme === null && prefersDarkTheme.matches)) {
-          updateTheme('dark');
-        } else {
-          updateTheme('light');
-        }
-      }
-  
-      toggle.addEventListener('click', switchTheme);
-      initialTheme();
-    });
-  
+  });
+
+  //! Light/Dark Mode
+  const sunIcon = document.querySelector(".sun");
+  const moonIcon = document.querySelector(".moon");
+  const morningImage = document.querySelector(".morning-img");
+  const nightImage = document.querySelector(".night-img");
+  const toggle = document.querySelector(".toggle");
+  document.addEventListener("DOMContentLoaded", function () {
     window.switchTheme = function () {
-      document.body.classList.toggle('darkmode');
-      if (document.body.classList.contains('darkmode')) {
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-        morningImage.classList.remove('hidden');
-        nightImage.classList.add('hidden');
-        localStorage.setItem('theme', 'dark');
+      document.body.classList.toggle("darkmode");
+      if (document.body.classList.contains("darkmode")) {
+        sunIcon.classList.remove("hidden");
+        moonIcon.classList.add("hidden");
+        morningImage.classList.remove("hidden");
+        nightImage.classList.add("hidden");
+        localStorage.setItem("theme", "dark");
       } else {
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-        morningImage.classList.add('hidden');
-        nightImage.classList.remove('hidden');
-        localStorage.setItem('theme', 'light');
+        sunIcon.classList.add("hidden");
+        moonIcon.classList.remove("hidden");
+        morningImage.classList.add("hidden");
+        nightImage.classList.remove("hidden");
+        localStorage.setItem("theme", "light");
+      }
+    };
+
+    function updateTheme(themeMode) {
+      if (themeMode === "dark") {
+        sunIcon.classList.add("hidden");
+        moonIcon.classList.remove("hidden");
+        morningImage.classList.add("hidden");
+        nightImage.classList.remove("hidden");
+        document.body.classList.add("darkmode");
+      } else {
+        sunIcon.classList.add("hidden");
+        moonIcon.classList.remove("hidden");
+        morningImage.classList.add("hidden");
+        nightImage.classList.remove("hidden");
+        document.body.classList.remove("darkmode");
       }
     }
+
+    function initialTheme() {
+      const prefersDarkTheme = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      );
+      const storedTheme = localStorage.getItem("theme");
+
+      if (
+        storedTheme === "dark" ||
+        (storedTheme === null && prefersDarkTheme.matches)
+      ) {
+        updateTheme("dark");
+      } else {
+        updateTheme("light");
+      }
+    }
+
+    toggle.addEventListener("click", switchTheme);
+    initialTheme();
+  });
+
+  window.switchTheme = function () {
+    document.body.classList.toggle("darkmode");
+    if (document.body.classList.contains("darkmode")) {
+      sunIcon.classList.remove("hidden");
+      moonIcon.classList.add("hidden");
+      morningImage.classList.remove("hidden");
+      nightImage.classList.add("hidden");
+      localStorage.setItem("theme", "dark");
+    } else {
+      sunIcon.classList.add("hidden");
+      moonIcon.classList.remove("hidden");
+      morningImage.classList.add("hidden");
+      nightImage.classList.remove("hidden");
+      localStorage.setItem("theme", "light");
+    }
+  };
 }
 
 export const LoadFooter = () => {
@@ -176,4 +180,4 @@ export const LoadFooter = () => {
       </div>
     </footer>
   `;
-}
+};
