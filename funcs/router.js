@@ -11,16 +11,15 @@ const routes = {
 };
 
 const ExtractHref = () => {
-  let url = location.href;
-  const urlParts = url.split("/");
-  console.log(urlParts, urlParts[urlParts.length - 2]);
-  if (urlParts.length > 4) {
-    var pathname = urlParts[urlParts.length - 2];
-  } else {
-    var pathname = urlParts[urlParts.length - 1];
+  const base = "/graphql/";
+  let path = location.pathname;
+  if (path.startsWith(base)) {
+    path = path.substring(base.length);
   }
-  console.log(pathname);
-  return pathname;
+  // Remove leading and trailing slashes
+  path = path.replace(/^\/|\/$/g, "");
+  console.log("Path detected:", path);
+  return path;
 };
 
 /**

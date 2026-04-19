@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/",
+  base: "/graphql/",
   plugins: [],
   preview: {
     port: 3000,
